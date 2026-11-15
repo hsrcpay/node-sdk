@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import { HsrcpayClient } from "../src";
-import { mockFetch, ok, page } from "./helpers";
+import { mockFetch, ok, page, queryOf } from "./helpers";
 
 const refund = {
   object: "refund",
@@ -32,7 +32,7 @@ describe("refunds", () => {
     const { client, calls } = setup(page([refund]));
     const result = await client.refunds.list({ payment_id: "pay_1", page: 2 });
     expect(result.data).toHaveLength(1);
-    expect(calls[0]?.url).toBe("http://api.test/v1/refunds?payment_id=pay_1&page=2");
+    expect(queryOf(calls[0]!.url)).toEqual({ payment_id: "pay_1", page: "2" });
   });
 
   test("retrieve rejects an empty id", () => {

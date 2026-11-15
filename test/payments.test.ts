@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import { HsrcpayClient } from "../src";
-import { mockFetch, ok, page, samplePayment } from "./helpers";
+import { mockFetch, ok, page, queryOf, samplePayment } from "./helpers";
 
 const setup = (...replies: Parameters<typeof mockFetch>) => {
   const mock = mockFetch(...replies);
@@ -44,7 +44,8 @@ describe("payments.retrieve and list", () => {
     const result = await client.payments.list({ customer_id: "cus_1", limit: 10, product_id: undefined });
     expect(result).toMatchObject({ total: 41, page: 1, limit: 10, pages: 5 });
     expect(result.data.map((p) => p.id)).toEqual(["pay_1"]);
-    expect(calls[0]?.url).toBe("http://api.test/v1/payments?customer_id=cus_1&limit=10");
+    expect(new URL(calls[0]!.url).pathname).toBe("/v1/payments");
+    expect(queryOf(calls[0]!.url)).toEqual({ customer_id: "cus_1", limit: "10" });
   });
 });
 

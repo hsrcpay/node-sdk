@@ -2,7 +2,13 @@
   "name": "@hsrcpay/sdk",
   "version": "0.0.0",
   "description": "Official Node.js SDK for HSRCPay: create, confirm, capture, cancel and refund payments with typed responses and built-in retries",
-  "keywords": ["hsrcpay", "payments", "payment-orchestration", "sdk", "typescript"],
+  "keywords": [
+    "hsrcpay",
+    "payments",
+    "payment-orchestration",
+    "sdk",
+    "typescript"
+  ],
   "license": "SEE LICENSE IN LICENSE",
   "author": {
     "name": "Phine Up LLC",
@@ -25,15 +31,21 @@
     "README.md",
     "LICENSE"
   ],
-  "main": "./dist/index.js",
+  "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "default": "./dist/index.js"
-    }
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./package.json": "./package.json"
   },
   "type": "module",
   "engines": {
@@ -43,12 +55,17 @@
     "clean": "rm -rf dist",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "test": "bun test",
-    "build": "bun run clean && bun run build:js && bun run build:types",
-    "build:js": "bun build ./src/index.ts --outdir ./dist --target node --format esm --minify --define \"__SDK_VERSION__='\\\"$npm_package_version\\\"'\"",
-    "build:types": "tsc -p tsconfig.build.json"
+    "test:coverage": "bun test --coverage",
+    "build": "bun scripts/build.ts && bun scripts/verify-dist.ts",
+    "prepublishOnly": "bun run build"
   },
   "devDependencies": {
     "@types/bun": "latest",
+    "dts-bundle-generator": "^10.0.0",
     "typescript": "^5.9.0"
+  },
+  "sideEffects": false,
+  "dependencies": {
+    "zod": "^4.6.7"
   }
 }

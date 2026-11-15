@@ -1,4 +1,4 @@
-import type { FetchLike } from "../src/http";
+import type { FetchLike } from "../src/core/http";
 
 export type RecordedCall = { url: string; method: string; headers: Record<string, string>; body: unknown };
 
@@ -58,3 +58,6 @@ export const samplePayment = (overrides: Record<string, unknown> = {}) => ({
   installments: null,
   ...overrides,
 });
+
+/** Query string of a recorded call as a plain object, independent of parameter order. */
+export const queryOf = (url: string): Record<string, string> => Object.fromEntries(new URL(url).searchParams);

@@ -1,5 +1,12 @@
-import { HsrcpayAbortError, HsrcpayApiError, HsrcpayConnectionError, HsrcpayTimeoutError } from "./errors";
-import type { MutationOptions, Page } from "./types";
+import type { z } from "zod";
+import {
+  HsrcpayAbortError,
+  HsrcpayApiError,
+  HsrcpayConnectionError,
+  HsrcpayResponseError,
+  HsrcpayTimeoutError,
+} from "./errors";
+import type { MutationOptions, Page } from "./schemas";
 
 export type FetchLike = (input: string, init: RequestInit) => Promise<Response>;
 
@@ -12,18 +19,24 @@ export type HttpClientConfig = {
   retryDelayMs: number;
   fetch: FetchLike;
   userAgent: string;
+  /** Parse every successful reply with the SDK schema and throw `HsrcpayResponseError` on drift. */
+  validateResponses: boolean;
 };
 
 export type Query = Record<string, string | number | boolean | undefined>;
 
+export type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
+
 export type HttpRequest = {
-  method: "GET" | "POST";
+  method: HttpMethod;
   path: string;
   query?: Query;
   body?: unknown;
 } & MutationOptions;
 
 const RETRYABLE_STATUS = new Set([429, 502, 503, 504]);
+/** Repeating these never changes the outcome beyond the first success (RFC 9110). */
+const SAFE_TO_REPEAT = new Set<HttpMethod>(["GET", "PUT", "DELETE"]);
 const MAX_BACKOFF_MS = 8_000;
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
@@ -34,14 +47,28 @@ const sleep = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve,
 export class HttpClient {
   constructor(private readonly config: HttpClientConfig) {}
 
-  async data<T>(req: HttpRequest): Promise<T> {
-    const body = await this.send(req);
-    return (body as { data: T }).data;
+  /** Returns the envelope `data` payload; `undefined` for void responses. */
+  async data<S extends z.ZodType>(req: HttpRequest, schema: S): Promise<z.output<S>>;
+  async data(req: HttpRequest): Promise<void>;
+  async data(req: HttpRequest, schema?: z.ZodType): Promise<unknown> {
+    const body = (await this.send(req)) as { data?: unknown } | undefined;
+    const data = body?.data;
+    return schema ? this.check(schema, data, `${req.method} ${req.path} response`) : undefined;
   }
 
-  async page<T>(req: HttpRequest): Promise<Page<T>> {
-    const body = (await this.send(req)) as Page<T>;
-    return { data: body.data, total: body.total, page: body.page, limit: body.limit, pages: body.pages };
+  async page<S extends z.ZodType>(req: HttpRequest, item: S): Promise<Page<z.output<S>>> {
+    const body = (await this.send(req)) as Page<unknown>;
+    if (this.config.validateResponses) {
+      for (const entry of body.data ?? []) this.check(item, entry, `${req.method} ${req.path} item`);
+    }
+    return { data: body.data as z.output<S>[], total: body.total, page: body.page, limit: body.limit, pages: body.pages };
+  }
+
+  private check<S extends z.ZodType>(schema: S, value: unknown, label: string): z.output<S> {
+    if (!this.config.validateResponses) return value as z.output<S>;
+    const result = schema.safeParse(value);
+    if (!result.success) throw new HsrcpayResponseError(label, result.error.issues);
+    return result.data;
   }
 
   private buildUrl(path: string, query?: Query): string {
@@ -68,9 +95,8 @@ export class HttpClient {
     };
   }
 
-  /** GET is always safe to repeat; POST only with an idempotency key. */
   private canRetry(req: HttpRequest): boolean {
-    return req.method === "GET" || Boolean(req.idempotencyKey);
+    return SAFE_TO_REPEAT.has(req.method) || Boolean(req.idempotencyKey);
   }
 
   private backoffMs(attempt: number, retryAfter: string | null): number {

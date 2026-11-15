@@ -1,3 +1,7 @@
+import type { z } from "zod";
+
+export type ValidationIssue = z.core.$ZodIssue;
+
 export class HsrcpayError extends Error {
   constructor(message: string, options?: { cause?: unknown }) {
     super(message, options);
@@ -34,5 +38,27 @@ export class HsrcpayTimeoutError extends HsrcpayConnectionError {
 export class HsrcpayAbortError extends HsrcpayError {
   constructor() {
     super("Request was aborted");
+  }
+}
+
+/** Thrown before any request is sent when the arguments violate the API contract. */
+export class HsrcpayValidationError extends HsrcpayError {
+  readonly issues: ValidationIssue[];
+
+  constructor(label: string, issues: ValidationIssue[]) {
+    const summary = issues.map((i) => `${i.path.length ? i.path.join(".") : "(root)"}: ${i.message}`).join("; ");
+    super(`Invalid ${label}: ${summary}`);
+    this.issues = issues;
+  }
+}
+
+/** Thrown when `validateResponses` is on and the API reply does not match the SDK schema. */
+export class HsrcpayResponseError extends HsrcpayError {
+  readonly issues: ValidationIssue[];
+
+  constructor(label: string, issues: ValidationIssue[]) {
+    const summary = issues.map((i) => `${i.path.length ? i.path.join(".") : "(root)"}: ${i.message}`).join("; ");
+    super(`Unexpected ${label} from the API: ${summary}`);
+    this.issues = issues;
   }
 }

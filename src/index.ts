@@ -1,20 +1,16 @@
-export { HsrcpayClient, DEFAULT_BASE_URL, type HsrcpayClientOptions } from "./client";
+export { HsrcpayClient, DEFAULT_BASE_URL, SDK_VERSION, type HsrcpayClientOptions } from "./client";
 export {
   HsrcpayAbortError,
   HsrcpayApiError,
   HsrcpayConnectionError,
   HsrcpayError,
+  HsrcpayResponseError,
   HsrcpayTimeoutError,
-} from "./errors";
-export type { FetchLike } from "./http";
-export type {
-  ConfirmPaymentParams,
-  CreatePaymentParams,
-  ListPaymentsParams,
-  PaymentExpand,
-  PaymentTimelineParams,
-  RefundPaymentParams,
-  RetrievePaymentParams,
-} from "./resources/payments";
-export type { ListRefundsParams } from "./resources/refunds";
-export * from "./types";
+  HsrcpayValidationError,
+  type ValidationIssue,
+} from "./core/errors";
+export type { FetchLike } from "./core/http";
+export * from "./core/schemas";
+export * from "./modules/charges";
+export * from "./modules/payments";
+export * from "./modules/refunds";
