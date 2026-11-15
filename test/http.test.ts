@@ -9,7 +9,7 @@ import {
 import { fail, mockFetch, ok, samplePayment } from "./helpers";
 
 const client = (fetch: ReturnType<typeof mockFetch>["fetch"], extra: { maxRetries?: number; timeoutMs?: number } = {}) =>
-  new HsrcpayClient({ apiKey: "k", fetch, retryDelayMs: 1, ...extra });
+  new HsrcpayClient({ apiKey: "sk_test_k", fetch, retryDelayMs: 1, ...extra });
 
 describe("error mapping", () => {
   test("maps an API error envelope", async () => {
@@ -89,13 +89,13 @@ describe("timeouts and aborts", () => {
     });
 
   test("times out", async () => {
-    const c = new HsrcpayClient({ apiKey: "k", fetch: hangingFetch, timeoutMs: 20, maxRetries: 0 });
+    const c = new HsrcpayClient({ apiKey: "sk_test_k", fetch: hangingFetch, timeoutMs: 20, maxRetries: 0 });
     await expect(c.payments.retrieve("p")).rejects.toBeInstanceOf(HsrcpayTimeoutError);
   });
 
   test("surfaces a caller abort as an abort error", async () => {
     const controller = new AbortController();
-    const c = new HsrcpayClient({ apiKey: "k", fetch: hangingFetch, timeoutMs: 5_000, maxRetries: 0 });
+    const c = new HsrcpayClient({ apiKey: "sk_test_k", fetch: hangingFetch, timeoutMs: 5_000, maxRetries: 0 });
     const pending = c.payments.retrieve("p", {}, { signal: controller.signal });
     controller.abort();
     await expect(pending).rejects.toBeInstanceOf(HsrcpayAbortError);

@@ -18,7 +18,7 @@ const refund = {
 
 const setup = (...replies: Parameters<typeof mockFetch>) => {
   const mock = mockFetch(...replies);
-  return { client: new HsrcpayClient({ apiKey: "k", baseUrl: "http://api.test", fetch: mock.fetch }), calls: mock.calls };
+  return { client: new HsrcpayClient({ apiKey: "sk_test_k", baseUrl: "http://api.test", fetch: mock.fetch }), calls: mock.calls };
 };
 
 describe("refunds", () => {

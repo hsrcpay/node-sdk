@@ -14,13 +14,23 @@ export class HsrcpayApiError extends HsrcpayError {
   readonly status: number;
   /** Platform error code from `error.code`, usually the HTTP status echoed by the server. */
   readonly code: number | undefined;
+  /** Machine-readable refusal code of the few endpoints that answer `{ code }` (e.g. `immutable_field`). */
+  readonly errorCode: string | undefined;
   readonly details: unknown;
   readonly body: unknown;
 
-  constructor(params: { status: number; message: string; code?: number; details?: unknown; body?: unknown }) {
+  constructor(params: {
+    status: number;
+    message: string;
+    code?: number;
+    errorCode?: string;
+    details?: unknown;
+    body?: unknown;
+  }) {
     super(params.message);
     this.status = params.status;
     this.code = params.code;
+    this.errorCode = params.errorCode;
     this.details = params.details;
     this.body = params.body;
   }

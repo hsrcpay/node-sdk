@@ -4,7 +4,7 @@ import { mockFetch, ok, page, queryOf, samplePayment } from "./helpers";
 
 const setup = (...replies: Parameters<typeof mockFetch>) => {
   const mock = mockFetch(...replies);
-  const client = new HsrcpayClient({ apiKey: "k", baseUrl: "http://api.test", fetch: mock.fetch, retryDelayMs: 1 });
+  const client = new HsrcpayClient({ apiKey: "sk_test_k", baseUrl: "http://api.test", fetch: mock.fetch, retryDelayMs: 1 });
   return { client, calls: mock.calls };
 };
 

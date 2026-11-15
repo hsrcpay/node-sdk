@@ -29,7 +29,7 @@ import {
 
 const strict = (reply: Response) => {
   const mock = mockFetch(reply);
-  return { client: new HsrcpayClient({ apiKey: "k", baseUrl: "http://api.test", fetch: mock.fetch, validateResponses: true }), calls: mock.calls };
+  return { client: new HsrcpayClient({ apiKey: "sk_test_k", baseUrl: "http://api.test", fetch: mock.fetch, validateResponses: true }), calls: mock.calls };
 };
 
 describe("enum parity with the backend", () => {
@@ -122,7 +122,7 @@ describe("validateResponses", () => {
 
   test("is off by default", async () => {
     const mock = mockFetch(ok({ totally: "different" }));
-    const client = new HsrcpayClient({ apiKey: "k", fetch: mock.fetch });
+    const client = new HsrcpayClient({ apiKey: "sk_test_k", fetch: mock.fetch });
     await expect(client.payments.retrieve("pay_1")).resolves.toEqual({ totally: "different" as never } as never);
   });
 });

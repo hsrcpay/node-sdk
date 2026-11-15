@@ -149,16 +149,21 @@ export class HttpClient {
     if (response.ok) return body;
 
     const err = isRecord(body) && isRecord(body.error) ? body.error : undefined;
+    // A few endpoints refuse with a bare `{ code, field? }` body instead of the standard error envelope.
+    const errorCode = isRecord(body) && typeof body.code === "string" ? body.code : undefined;
+    const field = isRecord(body) && typeof body.field === "string" ? body.field : undefined;
     const message =
       (err && typeof err.message === "string" && err.message) ||
       (isRecord(body) && typeof body.message === "string" && body.message) ||
+      errorCode ||
       response.statusText ||
       "Request failed";
     throw new HsrcpayApiError({
       status: response.status,
       message,
       code: typeof err?.code === "number" ? err.code : undefined,
-      details: err?.details,
+      errorCode,
+      details: err?.details ?? (field ? { field } : undefined),
       body,
     });
   }

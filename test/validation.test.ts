@@ -6,7 +6,7 @@ import { mockFetch, ok } from "./helpers";
 
 const setup = () => {
   const mock = mockFetch(ok({}));
-  return { client: new HsrcpayClient({ apiKey: "k", baseUrl: "http://api.test", fetch: mock.fetch }), calls: mock.calls };
+  return { client: new HsrcpayClient({ apiKey: "sk_test_k", baseUrl: "http://api.test", fetch: mock.fetch }), calls: mock.calls };
 };
 
 const expectInvalid = (run: (c: HsrcpayClient) => unknown, fragment?: string) => {
