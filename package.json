@@ -1,0 +1,53 @@
+{
+  "name": "@hsrcpay/node-sdk",
+  "version": "0.0.0",
+  "description": "Official Node.js SDK for HSRCPay",
+  "license": "SEE LICENSE IN LICENSE",
+  "author": {
+    "name": "Phine Up LLC",
+    "email": "info@phineup.com",
+    "url": "https://phineup.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hsrcpay/node-sdk.git"
+  },
+  "bugs": {
+    "url": "https://github.com/hsrcpay/node-sdk/issues"
+  },
+  "homepage": "https://hsrcpay.com",
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "clean": "rm -rf dist",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "bun test",
+    "build": "bun run clean && bun run build:js && bun run build:types",
+    "build:js": "bun build ./src/index.ts --outdir ./dist --target node --format esm --minify",
+    "build:types": "tsc -p tsconfig.build.json"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "typescript": "^5.9.0"
+  }
+}
