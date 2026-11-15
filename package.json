@@ -1,5 +1,5 @@
 {
-  "name": "@hsrcpay/node-sdk",
+  "name": "@hsrcpay/sdk",
   "version": "0.0.0",
   "description": "Official Node.js SDK for HSRCPay",
   "license": "SEE LICENSE IN LICENSE",

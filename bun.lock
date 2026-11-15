@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "@hsrcpay/node-sdk",
+      "name": "@hsrcpay/sdk",
       "devDependencies": {
         "@types/bun": "latest",
         "typescript": "^5.9.0",
