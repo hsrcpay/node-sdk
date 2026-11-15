@@ -46,6 +46,9 @@ Amounts are integers in minor units (`2500` is 25.00). Keys starting with `sk_te
 | `customers` (+ `addresses`) | `create`, `retrieve`, `list`, `update`, `delete` |
 | `products` (+ `prices`) and `prices` | `create`, `retrieve`, `list`, `update`, `updateStatus`, `delete`, `usage` |
 | `checkoutSessions` | `create`, `retrieve`, `list`, `update`, `expire`, `search` |
+| `subscriptions` (+ `changes`) | `create`, `retrieve`, `list`, `update`, `cancel`, `resume`; `changes.list`, `preview`, `schedule`, `cancel` |
+| `invoices` (+ `lines`) | `create`, `retrieve`, `list`, `update`, `delete`, `finalize`, `markPaid`, `void`; `lines.add`, `update`, `remove` |
+| `disputes` | `list`, `retrieve`, `update`, `accept`, `createTest`, `closeTest` |
 
 `HsrcpayPublicClient` (publishable key, browsers): hosted checkout only, see
 [Publishable keys and browsers](docs/public-client.md).
@@ -54,7 +57,7 @@ Amounts are integers in minor units (`2500` is 25.00). Keys starting with `sk_te
 
 - [Getting started](docs/getting-started.md)
 - [Configuration](docs/configuration.md)
-- [Payments](docs/payments.md), [Customers](docs/customers.md), [Products and prices](docs/catalog.md), [Hosted checkout](docs/checkout.md)
+- [Payments](docs/payments.md), [Customers](docs/customers.md), [Products and prices](docs/catalog.md), [Hosted checkout](docs/checkout.md), [Subscriptions](docs/subscriptions.md), [Invoices](docs/invoices.md), [Disputes](docs/disputes.md)
 - [Publishable keys and browsers](docs/public-client.md)
 - [Where `account_id` is needed](docs/account-id.md)
 - [Errors](docs/errors.md)

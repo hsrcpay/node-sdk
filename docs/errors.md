@@ -75,10 +75,14 @@ A few endpoints answer a bare `{ "code": "..." }` body. The SDK exposes it as `e
 |---|---|---|
 | `customer_has_active_subscriptions` | 409 | `customers.delete` |
 | `immutable_field` (field in `error.details.field`) | 400 | `products.prices.update` |
+| `invoice_not_draft`, `system_line_not_removable` | 409 | `invoices.lines.add/update/remove` |
+| `system_line_type_not_allowed` | 400 | `invoices.lines.add/update` (platform-generated line types) |
 
 Other refusals use the standard error envelope and put their code in `error.details`. For example `payments.confirm`
 answers 409 with `details: { code: "payment_outcome_pending" }` while the previous attempt's outcome is still unknown:
-confirming again could charge the card twice, so wait and retrieve the payment instead.
+confirming again could charge the card twice, so wait and retrieve the payment instead. Dispute refusals work the same
+way (`error.details.code`): `dispute_test_mode_only` (403, live key on a test-only call), `dispute_already_open` (409),
+`dispute_evidence_window_closed` and `dispute_not_awaiting_response` (409), `dispute_evidence_missing` (400).
 
 ## API errors
 

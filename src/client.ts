@@ -3,10 +3,13 @@ import { KeyKind } from "./core/key";
 import { ChargesResource } from "./modules/charges";
 import { CheckoutSessionsResource } from "./modules/checkout-sessions";
 import { CustomersResource } from "./modules/customers";
+import { DisputesResource } from "./modules/disputes";
+import { InvoicesResource } from "./modules/invoices";
 import { PaymentsResource } from "./modules/payments";
 import { PricesResource } from "./modules/prices";
 import { ProductsResource } from "./modules/products";
 import { RefundsResource } from "./modules/refunds";
+import { SubscriptionsResource } from "./modules/subscriptions";
 
 export type HsrcpayClientOptions = BaseClientOptions & {
   /** Secret API key (`sk_live_...` or `sk_test_...`). Test keys use the sandbox. Server-side only. */
@@ -24,6 +27,9 @@ export class HsrcpayClient {
   readonly products: ProductsResource;
   readonly prices: PricesResource;
   readonly checkoutSessions: CheckoutSessionsResource;
+  readonly disputes: DisputesResource;
+  readonly subscriptions: SubscriptionsResource;
+  readonly invoices: InvoicesResource;
 
   constructor(options: HsrcpayClientOptions) {
     assertServerEnvironment(options.dangerouslyAllowBrowser);
@@ -35,5 +41,8 @@ export class HsrcpayClient {
     this.products = new ProductsResource(http);
     this.prices = new PricesResource(http);
     this.checkoutSessions = new CheckoutSessionsResource(http);
+    this.disputes = new DisputesResource(http);
+    this.subscriptions = new SubscriptionsResource(http);
+    this.invoices = new InvoicesResource(http);
   }
 }
