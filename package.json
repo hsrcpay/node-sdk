@@ -1,6 +1,6 @@
 {
   "name": "@hsrcpay/sdk",
-  "version": "0.0.0",
+  "version": "0.2.0",
   "description": "Official Node.js SDK for HSRCPay: create, confirm, capture, cancel and refund payments with typed responses and built-in retries",
   "keywords": [
     "hsrcpay",
