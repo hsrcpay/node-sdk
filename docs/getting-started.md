@@ -17,7 +17,9 @@ const hsrcpay = new HsrcpayClient({ apiKey: process.env.HSRCPAY_API_KEY! });
 ```
 
 Use a **secret** key (`sk_live_...` or `sk_test_...`) and keep it on the server. A key containing `_test_` talks to
-the sandbox; no other switch is needed. See [Configuration](configuration.md) for every option.
+the sandbox; no other switch is needed. The client rejects a publishable key (`pk_...`) and refuses to start in a
+browser. For client-side code use `HsrcpayPublicClient`, see [Publishable keys and browsers](public-client.md).
+See [Configuration](configuration.md) for every option.
 
 ## A first payment
 

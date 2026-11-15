@@ -21,6 +21,10 @@ new HsrcpayClient({
 | `retryDelayMs` | `500` | Base of the exponential backoff. |
 | `validateResponses` | `false` | Parse every reply with the SDK schemas. See [validation](validation.md). |
 | `fetch` | global `fetch` | Custom implementation, for proxies or tests. |
+| `dangerouslyAllowBrowser` | `false` | `HsrcpayClient` only. It holds a secret key and refuses to start in a browser unless set. |
+
+`HsrcpayPublicClient` takes the same options except that the key option is called `publishableKey`.
+See [Publishable keys and browsers](public-client.md).
 
 ## Per-call options
 

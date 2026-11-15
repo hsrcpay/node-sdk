@@ -37,17 +37,26 @@ Amounts are integers in minor units (`2500` is 25.00). Keys starting with `sk_te
 
 ## Resources
 
+`HsrcpayClient` (secret key, server-side):
+
 | Resource | Methods |
 |---|---|
-| `hsrcpay.payments` | `create`, `retrieve`, `list`, `confirm`, `capture`, `cancel`, `refund`, `timeline` |
-| `hsrcpay.charges` | `retrieve`, `list` |
-| `hsrcpay.refunds` | `retrieve`, `list` |
+| `payments` | `create`, `retrieve`, `list`, `confirm`, `capture`, `cancel`, `refund`, `timeline` |
+| `charges`, `refunds` | `retrieve`, `list` |
+| `customers` (+ `addresses`) | `create`, `retrieve`, `list`, `update`, `delete` |
+| `products` (+ `prices`) and `prices` | `create`, `retrieve`, `list`, `update`, `updateStatus`, `delete`, `usage` |
+| `checkoutSessions` | `create`, `retrieve`, `list`, `update`, `expire`, `search` |
+
+`HsrcpayPublicClient` (publishable key, browsers): hosted checkout only, see
+[Publishable keys and browsers](docs/public-client.md).
 
 ## Documentation
 
 - [Getting started](docs/getting-started.md)
 - [Configuration](docs/configuration.md)
-- [Payments](docs/payments.md)
+- [Payments](docs/payments.md), [Customers](docs/customers.md), [Products and prices](docs/catalog.md), [Hosted checkout](docs/checkout.md)
+- [Publishable keys and browsers](docs/public-client.md)
+- [Where `account_id` is needed](docs/account-id.md)
 - [Errors](docs/errors.md)
 - [Retries and idempotency](docs/retries-and-idempotency.md)
 - [Validation and types](docs/validation.md)
