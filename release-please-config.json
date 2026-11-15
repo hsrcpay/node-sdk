@@ -2,6 +2,7 @@
   "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
   "release-type": "node",
   "bootstrap-sha": "0dd1dcc59db5b3221a86e20a97691f41c20b94f5",
+  "initial-version": "0.2.0",
   "packages": {
     ".": {
       "package-name": "@hsrcpay/sdk",
