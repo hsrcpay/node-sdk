@@ -66,13 +66,16 @@ bun run build
 
 ## Release flow
 
-`main` is the only branch. Every push to `main` runs typecheck, tests and build, then publishes to npm.
-The version is computed from the latest `v*` tag and the conventional commits since it:
+`main` is the only branch. Every push to `main` and every pull request runs typecheck, tests and build (CI only, nothing is published).
 
-- `feat!:` or `BREAKING CHANGE:` bumps major
-- `feat:` bumps minor
-- anything else bumps patch
+A release happens only when a new version tag is pushed:
 
+```sh
+git tag v1.2.3
+git push origin v1.2.3
+```
+
+The workflow checks that the tag is a semver version (`vMAJOR.MINOR.PATCH`, optionally `-rc.1` style, published under the `next` dist-tag) and that its commit is on `main`. It then runs CI again, publishes the package to npm with the version from the tag, and creates the GitHub release with generated notes.
 The version is never committed to `main`; it lives in the git tag, the GitHub release and the npm package.
 Required repository secret: `NPM_TOKEN`.
 

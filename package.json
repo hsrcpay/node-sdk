@@ -1,7 +1,8 @@
 {
   "name": "@hsrcpay/sdk",
   "version": "0.0.0",
-  "description": "Official Node.js SDK for HSRCPay",
+  "description": "Official Node.js SDK for HSRCPay: create, confirm, capture, cancel and refund payments with typed responses and built-in retries",
+  "keywords": ["hsrcpay", "payments", "payment-orchestration", "sdk", "typescript"],
   "license": "SEE LICENSE IN LICENSE",
   "author": {
     "name": "Phine Up LLC",
@@ -36,14 +37,14 @@
   },
   "type": "module",
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   },
   "scripts": {
     "clean": "rm -rf dist",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "test": "bun test",
     "build": "bun run clean && bun run build:js && bun run build:types",
-    "build:js": "bun build ./src/index.ts --outdir ./dist --target node --format esm --minify",
+    "build:js": "bun build ./src/index.ts --outdir ./dist --target node --format esm --minify --define \"__SDK_VERSION__='\\\"$npm_package_version\\\"'\"",
     "build:types": "tsc -p tsconfig.build.json"
   },
   "devDependencies": {
