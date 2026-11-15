@@ -46,6 +46,12 @@ jobs:
       - run: bun test
       - run: bun run build
       - name: Publish to npm
-        run: bun publish --access public
+        # A prerelease (1.0.0-rc.1) goes under the "rc" dist-tag so `npm i @hsrcpay/sdk` never installs it.
+        run: |
+          if [[ "${{ needs.release-please.outputs.tag_name }}" == *-* ]]; then
+            bun publish --access public --tag rc
+          else
+            bun publish --access public
+          fi
         env:
           NPM_CONFIG_TOKEN: ${{ secrets.NPM_TOKEN }}
